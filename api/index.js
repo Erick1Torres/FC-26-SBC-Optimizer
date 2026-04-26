@@ -1,15 +1,17 @@
-// /api/index.js
 const express = require('express');
 const cors = require('cors');
 const app = express();
 
-// Ahora subimos un nivel para entrar en la carpeta 'server'
-const { PORT } = require('../server/src/config/index'); 
-const recipeRoutes = require('../server/src/routes/recipeRoutes');
-
 app.use(cors());
 app.use(express.json());
 
-app.use('/api/v1/recipes', recipeRoutes);
+// Ruta de prueba directa
+app.get('/api/v1/recipes/:target', (req, res) => {
+  res.json({ 
+    message: "Conexión establecida con la API", 
+    target: req.params.target,
+    status: "success" 
+  });
+});
 
 module.exports = app;

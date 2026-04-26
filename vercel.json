@@ -2,7 +2,7 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/v1/recipes/:path*",
+      "source": "/api/v1/:path*",
       "destination": "/api/index.js"
     },
     {
