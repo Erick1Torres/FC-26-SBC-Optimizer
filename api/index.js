@@ -3,7 +3,7 @@ const cors = require('cors');
 const app = express();
 
 // Asegúrate de que las rutas ahora apunten bien (un solo punto porque están al lado)
-const recipeRoutes = require('./routes/recipeRoutes');
+const recipeRoutes = require('./src/routes/recipeRoutes');
 
 app.use(cors());
 app.use(express.json());
