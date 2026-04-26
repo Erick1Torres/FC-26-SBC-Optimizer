@@ -1,6 +1,6 @@
 import { useContext, useState, useEffect, useCallback, useMemo } from 'react';
 import { SBCContext } from '../context/SBCContext';
-import { fetchRecipeFromApi } from '../api/cliente';
+import { fetchRecipes } from '../api/cliente';
 import type { SBCRecipe } from '../types';
 
 export const useSBC = () => {
@@ -19,7 +19,7 @@ export const useSBC = () => {
     
     try {
       // Pedimos los datos al servidor REAL
-      const result = await fetchRecipeFromApi(rating);
+      const result = await fetchRecipes (rating);
       setData(result);
     } catch (err) {
       setError("No se encontraron recetas para esta media. ¿El servidor está encendido?");

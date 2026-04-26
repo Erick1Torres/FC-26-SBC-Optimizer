@@ -1,15 +1,17 @@
-import type { SBCRecipe } from '../types';
+const API_URL = '/api/v1'; 
 
-// Función tipada que hace la petición al servidor (Node.js)
-export const fetchRecipeFromApi = async (target: number): Promise<SBCRecipe> => {
-  const response = await fetch(`http://localhost:3000/api/v1/recipes/${target}`);
-  
-  // Si el servidor responde con error (ej. 404 porque no existe la media)
-  if (!response.ok) {
-    throw new Error('No se encontraron datos para esta media');
+export const fetchRecipes = async (target: number) => {
+  try {
+    const response = await fetch(`${API_URL}/recipes/${target}`);
+    
+    if (!response.ok) {
+      throw new Error('No se pudo obtener la información del servidor');
+    }
+
+    const data = await response.json();
+    return data;
+  } catch (error) {
+    console.error("Error en la petición:", error);
+    throw error;
   }
-  
-  // Convertimos la respuesta a JSON y la devolvemos
-  const data = await response.json();
-  return data;
 };
