@@ -2,8 +2,8 @@
   "version": 2,
   "rewrites": [
     {
-      "source": "/api/v1/recipes/:target",
-      "destination": "/server/src/index.js"
+      "source": "/api/v1/recipes/:path*",
+      "destination": "/api/index.js"
     },
     {
       "source": "/(.*)",
