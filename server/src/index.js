@@ -1,25 +1,23 @@
-// server/src/index.js
 const express = require('express');
 const cors = require('cors');
+const path = require('path'); // Añadimos esto para ayudar a Vercel
+
+// Usamos rutas absolutas para que Vercel no se pierda
 const { PORT } = require('./config/index'); 
 const recipeRoutes = require('./routes/recipeRoutes');
 
 const app = express();
 
-// Middlewares
 app.use(cors());
 app.use(express.json());
 
-// Rutas
+// Ruta de prueba para saber si la API está viva
+app.get('/api/health', (req, res) => res.send('API funcionando'));
+
 app.use('/api/v1/recipes', recipeRoutes);
 
-// Esto es para que funcione en tu ordenador (Local)
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(PORT, () => {
-    console.log(`🚀 Servidor corriendo en http://localhost:${PORT}`);
-  });
+  app.listen(PORT, () => console.log(`🚀 Local: http://localhost:${PORT}`));
 }
 
-// ESTO ES LO MÁS IMPORTANTE PARA VERCEL:
-// Exportamos la app para que Vercel la pueda convertir en una Serverless Function
 module.exports = app;
