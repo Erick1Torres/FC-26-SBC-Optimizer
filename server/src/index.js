@@ -1,18 +1,23 @@
 const express = require('express');
 const cors = require('cors');
-const path = require('path'); // Añade esto
 const app = express();
 
-// IMPORTANTE: Usamos path.resolve para que Node sepa exactamente dónde está el archivo
-const recipeRoutes = require(path.resolve(__dirname, 'routes/recipeRoutes'));
+// IMPORTANTE: Asegúrate de que los nombres de archivos coincidan exactos (mayúsculas/minúsculas)
+const recipeRoutes = require('./routes/recipeRoutes');
 
 app.use(cors());
 app.use(express.json());
 
+// Ruta de salud para probar si el servidor responde algo
+app.get('/api/v1/health', (req, res) => {
+  res.json({ status: "ok", message: "Servidor encendido" });
+});
+
 app.use('/api/v1/recipes', recipeRoutes);
 
+// Solo para desarrollo local
 if (process.env.NODE_ENV !== 'production') {
-  app.listen(3000, () => console.log(`Servidor local en puerto 3000`));
+  app.listen(3000, () => console.log("Servidor en puerto 3000"));
 }
 
 module.exports = app;
