@@ -1,19 +1,9 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build"
-    },
-    {
-      "src": "server/src/index.js",
-      "use": "@vercel/node"
-    }
-  ],
   "rewrites": [
     {
-      "source": "/api/(.*)",
-      "destination": "server/src/index.js"
+      "source": "/api/v1/recipes/:path*",
+      "destination": "/server/src/index.js"
     },
     {
       "source": "/(.*)",
