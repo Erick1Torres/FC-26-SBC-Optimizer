@@ -1,25 +1,22 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { SBCProvider } from './context/SBCContext';
 import { Home } from './pages/Home';
+import { NotFound } from './pages/NotFound';
 
 function App() {
   return (
-    <BrowserRouter>
-      {/* Contenedor principal con fondo oscuro de FC 26 */}
-      <div className="min-h-screen bg-slate-950 text-white font-sans">
-        <Routes>
-          {/* Ruta principal: carga el componente Home */}
-          <Route path="/" element={<Home />} />
-          
-          {/* Ruta 404: por si el usuario escribe una URL que no existe */}
-          <Route path="*" element={
-            <div className="flex flex-col items-center justify-center h-screen">
-              <h1 className="text-4xl font-bold text-red-500">404</h1>
-              <p>Esta página no existe en el club.</p>
-            </div>
-          } />
-        </Routes>
-      </div>
-    </BrowserRouter>
+    // 1. Envolvemos todo con el Provider para el estado global
+    <SBCProvider>
+      {/* 2. Envolvemos con el Router para la navegación */}
+      <BrowserRouter>
+        <div className="min-h-screen bg-slate-950 text-slate-100 font-sans">
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </div>
+      </BrowserRouter>
+    </SBCProvider>
   );
 }
 
