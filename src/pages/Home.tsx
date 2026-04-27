@@ -6,13 +6,13 @@ import { useSBC } from '../hooks/useSBC';
 import { fetchSuggestions } from '../api/cliente';
 
 export const Home: React.FC = () => {
-  // 1. Extraemos los datos del hook (sin totalCardsNeeded para evitar el error de Vercel)
+  // Extraigo los datos del hook (sin totalCardsNeeded para evitar el error de Vercel)
   const { selectedRating, setSelectedRating, data, isLoading, error } = useSBC();
   
-  // 2. Estado para la lista de sugerencias que vienen del servidor
+  //Estado para la lista de sugerencias que vienen del servidor
   const [suggestionsList, setSuggestionsList] = useState<any[]>([]);
   
-  // 3. Función para cargar las sugerencias desde la API
+  //Funcion para cargar las sugerencias desde la API
   const loadSuggestions = async () => {
     try {
       const result = await fetchSuggestions();
@@ -22,7 +22,7 @@ export const Home: React.FC = () => {
     }
   };
 
-  // 4. Cargar las sugerencias al abrir la página por primera vez
+  //Cargar las sugerencias al abrir la pagina por primera vez
   useEffect(() => {
     loadSuggestions();
   }, []);
@@ -36,7 +36,7 @@ export const Home: React.FC = () => {
       </h1>
       <p className="text-slate-400 mb-8 text-center">Selecciona la media objetivo de tu SBC</p>
 
-      {/* Cuadrícula de botones de medias */}
+      {/* Cuadricula de botones de medias */}
       <div className="grid grid-cols-3 gap-4 mb-10 w-full max-w-md">
         {availableRatings.map(rating => (
           <RatingButton 
@@ -48,7 +48,7 @@ export const Home: React.FC = () => {
         ))}
       </div>
 
-      {/* ZONA DE RESULTADOS DEL SOLVER */}
+      {/* esta es la zona para ver los resultados de solver */}
       <div className="w-full mb-12">
         {isLoading && (
           <p className="text-yellow-500 text-center text-xl animate-pulse">Consultando al servidor...</p>
@@ -74,10 +74,10 @@ export const Home: React.FC = () => {
         )}
       </div>
 
-      {/* SECCIÓN DE SUGERENCIAS Y FORMULARIO */}
+      {/* seccion de sugerencias y el formulario */}
       <div className="w-full border-t border-slate-700 pt-8 flex flex-col items-center gap-12">
         
-        {/* Pasamos loadSuggestions al formulario para que refresque la lista al enviar */}
+        {/* pase loadSuggestions al formulario para que refresque la lista al enviar */}
         <SuggestForm onSuccess={loadSuggestions} />
 
         <div className="w-full max-w-md mb-10">
@@ -91,7 +91,7 @@ export const Home: React.FC = () => {
               <p className="text-slate-500 text-sm text-center">No hay sugerencias aún. ¡Sé el primero!</p>
             )}
             
-            {/* Mostramos las sugerencias (las más nuevas primero) */}
+            {/* aqui muestro las sugerencias (las mas nuevas primero) */}
             {suggestionsList.slice().reverse().map((s) => (
               <div key={s.id} className="bg-slate-900/50 p-3 rounded-lg border border-slate-800 animate-fade-in">
                 <div className="flex justify-between items-center mb-1">

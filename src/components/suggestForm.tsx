@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { postSuggestion } from '../api/cliente';
 
-// Añadimos una "prop" para que el formulario le avise a la Home que hay datos nuevos
+// añado una "prop" para que el formulario le avise a la Home que hay datos nuevos
 interface SuggestFormProps {
   onSuccess: () => void;
 }
@@ -30,13 +30,13 @@ export const SuggestForm: React.FC<SuggestFormProps> = ({ onSuccess }) => {
 
     try {
       setIsSending(true);
-      // ENVIAMOS AL SERVIDOR
+      // aqui lo envio al servidor
       await postSuggestion(targetNum, players);
       
       setSuccess(true);
       setTarget('');
       setPlayers('');
-      // Avisamos a la Home para que recargue la lista de abajo
+      // Aviso al Home para que recargue la lista de abajo
       onSuccess();
     } catch (err) {
       setError('No se pudo enviar la sugerencia al servidor.');
