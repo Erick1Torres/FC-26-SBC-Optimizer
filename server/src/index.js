@@ -7,7 +7,7 @@ const recipeRoutes = require('./routes/recipeRoutes');
 app.use(cors());
 app.use(express.json());
 
-// --- NUEVA SECCIÓN DE SUGERENCIAS ---
+// seccion de sugerencias
 let suggestions = [
   { id: 1, target: 88, players: "3x89, 8x87", date: new Date() }
 ];
