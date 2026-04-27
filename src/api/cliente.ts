@@ -1,15 +1,10 @@
-// src/api/cliente.ts
-
-// Añadimos el slash inicial para asegurar que busque desde la raíz del dominio
+// Define esto arriba de todo para que todas las funciones puedan usarlo
 const API_URL = '/api/v1'; 
 
 export const fetchRecipes = async (target: number) => {
   try {
-    // Forzamos la ruta completa
     const response = await fetch(`${API_URL}/recipes/${target}`);
     
-    // Si Vercel te devuelve un HTML (la propia web) en vez de un JSON, 
-    // es que la ruta está mal redireccionada.
     const contentType = response.headers.get("content-type");
     if (!response.ok || !contentType || !contentType.includes("application/json")) {
        throw new Error('El servidor no respondió con datos válidos');
@@ -20,4 +15,23 @@ export const fetchRecipes = async (target: number) => {
     console.error("Error en la petición:", error);
     throw error;
   }
+};
+
+// --- NUEVAS FUNCIONES PARA LAS SUGERENCIAS ---
+
+// Función para traer todas las sugerencias
+export const fetchSuggestions = async () => {
+  const response = await fetch(`${API_URL}/suggestions`);
+  if (!response.ok) throw new Error('Error al cargar sugerencias');
+  return await response.json();
+};
+
+// Función para enviar una nueva sugerencia
+export const postSuggestion = async (target: number, players: string) => {
+  const response = await fetch(`${API_URL}/suggestions`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ target, players })
+  });
+  return await response.json();
 };

@@ -1,19 +1,23 @@
 import React, { useState } from 'react';
+import { postSuggestion } from '../api/cliente';
 
-export const SuggestForm: React.FC = () => {
-  // Estados controlados para los inputs y mensajes
+// Añadimos una "prop" para que el formulario le avise a la Home que hay datos nuevos
+interface SuggestFormProps {
+  onSuccess: () => void;
+}
+
+export const SuggestForm: React.FC<SuggestFormProps> = ({ onSuccess }) => {
   const [target, setTarget] = useState<string>('');
   const [players, setPlayers] = useState<string>('');
   const [error, setError] = useState<string>('');
   const [success, setSuccess] = useState<boolean>(false);
+  const [isSending, setIsSending] = useState(false);
 
-  // Manejador del envío del formulario
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault(); // Evita que la página se recargue
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     setError('');
     setSuccess(false);
 
-    // Validación básica que pide el profesor
     const targetNum = parseInt(target);
     if (!target || isNaN(targetNum) || targetNum < 85 || targetNum > 90) {
       setError('Por favor, introduce una media válida (entre 85 y 90).');
@@ -24,10 +28,21 @@ export const SuggestForm: React.FC = () => {
       return;
     }
 
-    // Si todo va bien, mostramos mensaje de éxito y limpiamos
-    setSuccess(true);
-    setTarget('');
-    setPlayers('');
+    try {
+      setIsSending(true);
+      // ENVIAMOS AL SERVIDOR
+      await postSuggestion(targetNum, players);
+      
+      setSuccess(true);
+      setTarget('');
+      setPlayers('');
+      // Avisamos a la Home para que recargue la lista de abajo
+      onSuccess();
+    } catch (err) {
+      setError('No se pudo enviar la sugerencia al servidor.');
+    } finally {
+      setIsSending(false);
+    }
   };
 
   return (
@@ -41,7 +56,7 @@ export const SuggestForm: React.FC = () => {
             type="number" 
             value={target}
             onChange={(e) => setTarget(e.target.value)}
-            className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white focus:border-yellow-500 focus:outline-none"
+            className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white focus:border-yellow-500"
             placeholder="Ej: 86"
           />
         </div>
@@ -52,17 +67,20 @@ export const SuggestForm: React.FC = () => {
             type="text" 
             value={players}
             onChange={(e) => setPlayers(e.target.value)}
-            className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white focus:border-yellow-500 focus:outline-none"
+            className="w-full p-2 rounded bg-slate-900 border border-slate-600 text-white focus:border-yellow-500"
             placeholder="Ej: 2x87, 9x85"
           />
         </div>
 
-        {/* Mensajes de feedback */}
         {error && <p className="text-red-400 text-sm bg-red-400/10 p-2 rounded">{error}</p>}
-        {success && <p className="text-green-400 text-sm bg-green-400/10 p-2 rounded">¡Gracias! Receta enviada a revisión.</p>}
+        {success && <p className="text-green-400 text-sm bg-green-400/10 p-2 rounded">¡Enviada con éxito!</p>}
 
-        <button type="submit" className="mt-2 bg-yellow-500 text-black font-bold py-2 rounded hover:bg-yellow-400 transition-colors">
-          Enviar Sugerencia
+        <button 
+          type="submit" 
+          disabled={isSending}
+          className="mt-2 bg-yellow-500 text-black font-bold py-2 rounded hover:bg-yellow-400 disabled:opacity-50"
+        >
+          {isSending ? 'Enviando...' : 'Enviar Sugerencia'}
         </button>
       </form>
     </div>
